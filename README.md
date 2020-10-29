@@ -19,3 +19,10 @@ python3 -m venv ./venv # If this does not work for you try: virtualenv venv -p p
 source venv/bin/activate
 pip install -r requirements.txt
 ```
+
+## Documentation
+
+To start the project run:
+```bash
+./run.py
+```
