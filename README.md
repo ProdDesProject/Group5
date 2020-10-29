@@ -5,6 +5,7 @@ In addition, the app can recognize the worth of the coins and sum it up.
 
 ## Developers
 * Andreas Scheipers <k0scan00@students.oamk.fi>
+* Marek Fiala <k0fima00@students.oam.fi>
 
 ## Software Requirements
 * \>= Python 3.6
