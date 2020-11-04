@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.views import APIView
 from api.coins.serializers import UserSerializer, GroupSerializer
 from django.http import HttpResponse
 from django.http import HttpRequest
@@ -17,7 +18,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -26,7 +27,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 def res(message, error=None, status=200, content_type='application/json'):
@@ -46,10 +47,13 @@ def res(message, error=None, status=200, content_type='application/json'):
 
     return HttpResponse(json.dumps(content), status=status, content_type=content_type)
 
-def coincounter(req):
-    # check if req.body is an image (https://docs.python.org/2/library/imghdr.html#imghdr.what)
-    image_type = imghdr.what('upload', req.body)
-    if not image_type:
-        return res(None, error=('No image or wrong format submitted.', 1), status=400)
-    else:
-        return res(count_coins(req.body))
+class CoinCounterView(APIView):
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        # check if req.body is an image (https://docs.python.org/2/library/imghdr.html#imghdr.what)
+        image_type = imghdr.what('upload', request.body)
+        if not image_type:
+            return res(None, error=('No image or wrong format submitted.', 1), status=400)
+        else:
+            return res(count_coins(request.body))
