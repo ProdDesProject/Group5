@@ -48,7 +48,7 @@ def res(message, error=None, status=200, content_type='application/json'):
     return HttpResponse(json.dumps(content), status=status, content_type=content_type)
 
 class CoinCounterView(APIView):
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         # check if req.body is an image (https://docs.python.org/2/library/imghdr.html#imghdr.what)

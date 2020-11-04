@@ -16,6 +16,7 @@ Including another URLconf
 from django.urls import include, path
 from rest_framework import routers
 from api.coins import views
+from rest_framework.authtoken.views import obtain_auth_token
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -26,5 +27,6 @@ router.register(r'groups', views.GroupViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('coincounter/', views.CoinCounterView.as_view(), name='coincounter')
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    path('coincounter/', views.CoinCounterView.as_view(), name='coincounter'),
 ]
