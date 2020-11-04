@@ -26,3 +26,14 @@ To start the project run:
 ```bash
 ./run.py
 ```
+
+API server initial setup:
+```bash
+python manage.py migrate
+python manage.py createsuperuser --email admin@example.com --username admin
+```
+
+Start API server:
+```bash
+python manage.py runserver
+```
