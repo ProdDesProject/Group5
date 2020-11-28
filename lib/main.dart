@@ -150,8 +150,11 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: EdgeInsets.only(top: 30),
               child: ListView.builder(
+                itemCount: _coins.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return CoinWidget(type: '1€', amount: 10,);
+                  String label = _coins[index]['label'];
+                  int amount = _coins[index]['amount'];
+                  return CoinWidget(label: label, amount: amount,);
                 }
               )
             ),
@@ -226,7 +229,7 @@ class HeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
-        padding: EdgeInsets.only(left: 15, right: 15),
+        padding: EdgeInsets.only(left: 25, right: 25),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -254,11 +257,11 @@ class HeaderWidget extends StatelessWidget {
 class CoinWidget extends StatelessWidget {
   const CoinWidget({
     Key key,
-    this.type,
+    this.label,
     this.amount,
   }) : super(key: key);
 
-  final String type;
+  final String label;
   final int amount;
 
   @override
@@ -274,10 +277,24 @@ class CoinWidget extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: Container(
             child: Padding(
-              padding: EdgeInsets.only(left: 15, right: 15),
+              padding: EdgeInsets.only(left: 22, right: 25),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(this.type, textAlign: TextAlign.left,)
+                  Row(
+                    children: [
+                      Image.asset(
+                        getCoinImagePath(this.label),
+                        fit: BoxFit.contain,
+                        height: 40,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(this.label, textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),),
+                      ),
+                    ],
+                  ),
+                  Text(this.amount.toString(), textAlign: TextAlign.right, style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),),
                 ],
               ),
             ),
@@ -298,4 +315,13 @@ class CoinWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+String getCoinImagePath(String label) {
+  var paths = {
+    '2€': 'assets/Common_face_of_two_euro_coin.jpg',
+    '1€': 'assets/Common_face_of_one_euro_coin.jpg',
+    '0,50€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
+  };
+  return paths[label];
 }
