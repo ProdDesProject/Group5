@@ -144,34 +144,18 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.start,
+      body: SafeArea(
+        child: Stack(
           children: <Widget>[
-            HeaderWidget(),
-            Expanded(
+            Padding(
+              padding: EdgeInsets.only(top: 30),
               child: ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                    return CoinWidget();
-                  }
+                itemBuilder: (BuildContext context, int index) {
+                  return CoinWidget(type: '1€', amount: 10,);
+                }
               )
             ),
+            HeaderWidget(),
             /*Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
@@ -257,9 +241,9 @@ class HeaderWidget extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
+            spreadRadius: 1,
+            blurRadius: 2,
+            offset: Offset(0, 0), // changes position of shadow
           ),
         ],
       ),
@@ -268,28 +252,49 @@ class HeaderWidget extends StatelessWidget {
 }
 
 class CoinWidget extends StatelessWidget {
+  const CoinWidget({
+    Key key,
+    this.type,
+    this.amount,
+  }) : super(key: key);
+
+  final String type;
+  final int amount;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Padding(
-        padding: EdgeInsets.only(left: 15, right: 15),
-        child: Row(
-          children: [
-            Text('2€', textAlign: TextAlign.left,)
-          ],
+      child: ClipPath(
+        clipper: ShapeBorderClipper(
+          shape: RoundedRectangleBorder()
         ),
-      ),
-      height: 50,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
+        child: Container(
+          height: 53,
+          color: Colors.white,
+          alignment: Alignment.topCenter,
+          child: Container(
+            child: Padding(
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: Row(
+                children: [
+                  Text(this.type, textAlign: TextAlign.left,)
+                ],
+              ),
+            ),
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 1,
+                  offset: Offset(0, 0), // changes position of shadow
+                ),
+              ],
+            ),
           ),
-        ],
+        )
       ),
     );
   }
