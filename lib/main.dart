@@ -1,41 +1,40 @@
+import 'package:camera/camera.dart';
+import 'package:coin_counter/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 
-void main() {
-  runApp(MyApp());
-}
+Future<void> main() async {
+  // Ensure that plugin services are initialized so that `availableCameras()`
+  // can be called before `runApp()`
+  WidgetsFlutterBinding.ensureInitialized();
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  // Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+  // Get a specific camera from the list of available cameras.
+  final firstCamera = cameras.first;
+
+  runApp(
+    MaterialApp(
       title: 'Coin Counter',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
+        primarySwatch: Colors.deepPurple,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Coin Collection'),
-    );
-  }
+      home: MyHomePage(title: 'Coin Collection', camera: firstCamera,),
+    ),
+  );
 }
 
 class MyHomePage extends StatefulWidget {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final CameraDescription camera;
 
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({
+    Key key,
+    this.title,
+    @required this.camera,
+  }) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -192,12 +191,14 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          double totalValue = _getTotalValue();
-          _scaffoldKey.currentState.showSnackBar(
-              SnackBar(
-                  content: Text(totalValue.toString())
-              )
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>
+              TakePictureScreen(camera: this.widget.camera)));
+          // double totalValue = _getTotalValue();
+          // _scaffoldKey.currentState.showSnackBar(
+          //    SnackBar(
+          //        content: Text(totalValue.toString())
+          //    )
+          //);
         },
         tooltip: 'Add',
         child: Container(
