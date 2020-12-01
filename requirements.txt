@@ -2,4 +2,4 @@ numpy == 1.19.3
 sklearn == 0.0
 imageio == 2.9.0
 sklearn_json == 0.1.0
-pandas == 1.1.4
+compress-json == 1.0.4
