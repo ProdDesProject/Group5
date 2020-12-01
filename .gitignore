@@ -139,3 +139,13 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+.vscode/settings.json
+
+# python file for testing
+classifier/Test.py
+
+# File too big for git
+classifier/classifier.json
+
+# data doesn't need to be on git
+original_split/
