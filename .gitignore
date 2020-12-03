@@ -139,3 +139,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Ignoring cropped coins
+find_coins/cropped_coins/
