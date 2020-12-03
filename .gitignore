@@ -149,3 +149,6 @@ classifier/classifier.json
 
 # data doesn't need to be on git
 original_split/
+
+# Ignoring cropped coins
+find_coins/cropped_coins/
