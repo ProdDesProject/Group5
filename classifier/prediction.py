@@ -55,7 +55,6 @@ def main():
     """
     coin_types = {'1c', '2c', '5c', '10c', '20c', '50c', '1e', '2e'}
     pre = Prediction()
-    path = os.getcwd()
     for coin in coin_types:
         results = []
         for x in np.arange(10):

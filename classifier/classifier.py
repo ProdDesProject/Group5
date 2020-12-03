@@ -102,15 +102,13 @@ def create_classifier(training_data_im, training_data_real):
     #parameters with best score for classifier
     #{'criterion': 'gini', 'max_features': 'auto', 'min_impurity_decrease': 0.001, 'n_jobs': 3, 'oob_score': True, 'random_state': 42}
     #0.5338775510204081
-    #clf = RandomForestClassifier(criterion='gini', max_features='auto', min_impurity_decrease=0.001, n_jobs=3, oob_score=True, random_state=42)
-    #clf.fit(X_train,y_train)
+    clf = RandomForestClassifier(criterion='gini', max_features='auto', min_impurity_decrease=0.001, n_jobs=3, oob_score=True, random_state=42)
+    clf.fit(X_train,y_train)
 
     #create best model from grid search and save it to json
-    #skljson.to_json(clf,'./classifier/classifier.json')
+    skljson.to_json(clf,'./classifier/classifier.json')
 
-    #with ZipFile('./classifier/classifier.zip','w') as zip:
-    #    zip.write('./classifier/classifier.json') 
-
+    #the classifier needs to be compressed as it is too big to push on git
     with open('./classifier/classifier.json', 'rb') as f_in:
         with gzip.open('./classifier/classifier.json.gz', 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)
