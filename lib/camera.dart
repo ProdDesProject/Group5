@@ -123,6 +123,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
             widget.takeImageCallback(path);
 
+            Navigator.pop(context);
+
 
             // If the picture was taken, display it on a new screen.
             /*Navigator.push(

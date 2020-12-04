@@ -97,11 +97,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   ];
 
-  void addCoins(List coins) {
-    setState(() {
-
+  void _addCoins(List coins) {
+    coins.forEach((coin) {
+      int index = _coins.indexWhere((e) => e['label'] == coin['label']);
+      int old = int.tryParse(_coins[index]['amount'].toString());
+      setState(() {
+        _coins[index]['amount'] = old + 1;
+      });
     });
-    print(coins);
   }
 
   double _getTotalValue() {
@@ -125,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (response['error'] != null) {
         // TODO: handle errors
       } else {
-        addCoins(response['result']['coins']);
+        _addCoins(response['result']['coins']);
       }
     } catch (e) {
       print(e);
