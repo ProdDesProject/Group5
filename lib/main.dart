@@ -363,14 +363,14 @@ class CoinWidget extends StatelessWidget {
 
 String getCoinImagePath(String label) {
   var paths = {
-    '2,00€': 'assets/Common_face_of_two_euro_coin.jpg',
-    '1,00€': 'assets/Common_face_of_one_euro_coin.jpg',
-    '0,50€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
-    '0,20€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
-    '0,10€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
-    '0,05€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
-    '0,02€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
-    '0,01€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
+    '2,00€': 'assets/2,00€.png',
+    '1,00€': 'assets/1,00€.png',
+    '0,50€': 'assets/0,50€.png',
+    '0,20€': 'assets/0,20€.png',
+    '0,10€': 'assets/0,10€.png',
+    '0,05€': 'assets/0,05€.png',
+    '0,02€': 'assets/0,02€.png',
+    '0,01€': 'assets/0,01€.png',
   };
   return paths[label];
 }
