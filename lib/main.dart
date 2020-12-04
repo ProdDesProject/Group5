@@ -91,6 +91,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return sum;
   }
 
+  void _scanCoins() {
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => TakePictureScreen(camera: this.widget.camera))
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -107,13 +113,15 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Padding(padding: EdgeInsets.only(left: 5.0)),
             Image.asset(
               'assets/logo.png',
               fit: BoxFit.contain,
               height: 40,
             ),
             Container(
-                padding: const EdgeInsets.all(8.0), child: Text('Coin Counter'))
+                padding: EdgeInsets.only(left: 10.0),
+                child: Text('Coin Counter'))
           ],
         ),
         flexibleSpace: Container(
@@ -140,7 +148,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   )
               );
             },
-          )
+          ),
+          Padding(padding: EdgeInsets.only(right: 8.0)),
         ],
       ),
       body: SafeArea(
@@ -191,8 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) =>
-              TakePictureScreen(camera: this.widget.camera)));
+          _scanCoins();
           // double totalValue = _getTotalValue();
           // _scaffoldKey.currentState.showSnackBar(
           //    SnackBar(
@@ -278,7 +286,7 @@ class CoinWidget extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: Container(
             child: Padding(
-              padding: EdgeInsets.only(left: 22, right: 25),
+              padding: EdgeInsets.only(left: 20, right: 25),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
