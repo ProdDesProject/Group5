@@ -9,10 +9,12 @@ import 'package:path_provider/path_provider.dart';
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
   final CameraDescription camera;
+  final void Function(String imagePath) takeImageCallback;
 
   const TakePictureScreen({
     Key key,
     @required this.camera,
+    @required this.takeImageCallback,
   }) : super(key: key);
 
   @override
@@ -47,7 +49,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext parentContext) {
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -104,7 +106,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
           // Take the Picture in a try / catch block. If anything goes wrong,
           // catch the error.
           try {
-            print('here');
             // Ensure that the camera is initialized.
             await _initializeControllerFuture;
 
@@ -119,6 +120,10 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
             // Attempt to take a picture and log where it's been saved.
             await _controller.takePicture(path);
+
+            widget.takeImageCallback(path);
+
+
             // If the picture was taken, display it on a new screen.
             /*Navigator.push(
               context,

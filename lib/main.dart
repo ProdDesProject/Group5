@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:coin_counter/camera.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as developer;
+import 'package:coin_counter/api.dart';
 
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`
@@ -56,12 +56,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var _coins = [
     {
-      'label': '2€',
+      'label': '2,00€',
       'worth': 2.0,
       'amount': 21,
     },
     {
-      'label': '1€',
+      'label': '1,00€',
       'worth': 1.0,
       'amount': 43,
     },
@@ -69,18 +69,39 @@ class _MyHomePageState extends State<MyHomePage> {
       'label': '0,50€',
       'worth': 0.5,
       'amount': 21,
+    },
+    {
+      'label': '0,20€',
+      'worth': 0.2,
+      'amount': 0,
+    },
+    {
+      'label': '0,10€',
+      'worth': 0.1,
+      'amount': 21,
+    },
+    {
+      'label': '0,05€',
+      'worth': 0.05,
+      'amount': 21,
+    },
+    {
+      'label': '0,02€',
+      'worth': 0.02,
+      'amount': 21,
+    },
+    {
+      'label': '0,01€',
+      'worth': 0.01,
+      'amount': 21,
     }
   ];
 
-  void _incrementCounter() {
+  void addCoins(List coins) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      // _counter++;
+
     });
+    print(coins);
   }
 
   double _getTotalValue() {
@@ -91,10 +112,24 @@ class _MyHomePageState extends State<MyHomePage> {
     return sum;
   }
 
-  void _scanCoins() {
+  void _takeImage() {
     Navigator.push(context, MaterialPageRoute(
-        builder: (context) => TakePictureScreen(camera: this.widget.camera))
+        builder: (context) => TakePictureScreen(camera: this.widget.camera, takeImageCallback: this._takeImageCallback,))
     );
+  }
+
+  Future<void> _takeImageCallback(String imagePath) async {
+    try {
+      Map response = await countCoins(imagePath);
+
+      if (response['error'] != null) {
+        // TODO: handle errors
+      } else {
+        addCoins(response['result']['coins']);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -200,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _scanCoins();
+          _takeImage();
           // double totalValue = _getTotalValue();
           // _scaffoldKey.currentState.showSnackBar(
           //    SnackBar(
@@ -328,9 +363,14 @@ class CoinWidget extends StatelessWidget {
 
 String getCoinImagePath(String label) {
   var paths = {
-    '2€': 'assets/Common_face_of_two_euro_coin.jpg',
-    '1€': 'assets/Common_face_of_one_euro_coin.jpg',
+    '2,00€': 'assets/Common_face_of_two_euro_coin.jpg',
+    '1,00€': 'assets/Common_face_of_one_euro_coin.jpg',
     '0,50€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
+    '0,20€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
+    '0,10€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
+    '0,05€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
+    '0,02€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
+    '0,01€': 'assets/Common_face_of_fifty_eurocent_coin.jpg',
   };
   return paths[label];
 }
