@@ -9,6 +9,7 @@ def count_coins(img: bytes):
                     'y': 0.7,
                     'r': 0.1,
                 },
+                'label': '2,00€',
                 'worth': 2.0,
             },
             {
@@ -17,6 +18,7 @@ def count_coins(img: bytes):
                     'y': 0.5,
                     'r': 0.05,
                 },
+                'label': '0,05€',
                 'worth': 0.05,
             },
         ],
