@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:coin_counter/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:coin_counter/api.dart';
+
+import 'insturction-overlay..dart';
 
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`
@@ -53,6 +57,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  OverlayEntry _instructionOverlayEntry;
 
   var _coins = [
     {
@@ -121,14 +127,37 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _instructionOverlayOn() {
+    this._instructionOverlayEntry = OverlayEntry(builder: (context) =>
+        InstructionsOverlay(
+          cancelCallback: _instructionOverlayOff,
+          skipCallback: () {
+            _instructionOverlayOff();
+            _takeImage();
+          },
+          doneCallback: () {
+            _instructionOverlayOff();
+            _takeImage();
+          },
+        ));
+    Overlay.of(context).insert(this._instructionOverlayEntry);
+  }
+
+  void _instructionOverlayOff() {
+    this._instructionOverlayEntry.remove();
+  }
+
   Future<void> _takeImageCallback(String imagePath) async {
     try {
       Map response = await countCoins(imagePath);
-
       if (response['error'] != null) {
         // TODO: handle errors
       } else {
         _addCoins(response['result']['coins']);
+
+        // Delete file
+        File image = File(imagePath);
+        await image.delete();
       }
     } catch (e) {
       print(e);
@@ -145,6 +174,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       key: _scaffoldKey,
+      extendBody: true,
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -190,27 +221,25 @@ class _MyHomePageState extends State<MyHomePage> {
           Padding(padding: EdgeInsets.only(right: 8.0)),
         ],
       ),
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Padding(
+      body: Stack(
+        children: <Widget>[
+          Padding(
               padding: EdgeInsets.only(top: 30),
               child: ListView.builder(
-                itemCount: _coins.length,
-                itemBuilder: (BuildContext context, int index) {
-                  String label = _coins[index]['label'];
-                  int amount = _coins[index]['amount'];
-                  return CoinWidget(label: label, amount: amount,);
-                }
+                  itemCount: _coins.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    String label = _coins[index]['label'];
+                    int amount = _coins[index]['amount'];
+                    return CoinWidget(label: label, amount: amount,);
+                  }
               )
-            ),
-            HeaderWidget(),
-            /*Text(
+          ),
+          HeaderWidget(),
+          /*Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),*/
-          ],
-        ),
+        ],
       ),
       bottomNavigationBar: BottomAppBar(
         color: Color(0xFF5e00d6),
@@ -238,7 +267,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _takeImage();
+          _instructionOverlayOn();
+          // _takeImage();
           // double totalValue = _getTotalValue();
           // _scaffoldKey.currentState.showSnackBar(
           //    SnackBar(
@@ -363,6 +393,8 @@ class CoinWidget extends StatelessWidget {
     );
   }
 }
+
+
 
 String getCoinImagePath(String label) {
   var paths = {

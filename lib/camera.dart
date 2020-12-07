@@ -35,6 +35,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       widget.camera,
       // Define the resolution to use.
       ResolutionPreset.veryHigh,
+      // Disable audio to not get permission request on Android
+      enableAudio: false,
     );
 
     // Next, initialize the controller. This returns a Future.
