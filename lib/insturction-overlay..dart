@@ -79,10 +79,18 @@ class InstructionsOverlayState extends State<InstructionsOverlay> {
                           alignment: MainAxisAlignment.spaceEvenly,
                           // buttonPadding: EdgeInsets.only(left: 5, right: 5, top: 1, bottom: 1),
                           children: [
-                            FlatButton(child: Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade300),), onPressed: this.widget.cancelCallback,),
-                            FlatButton(child: Text('SKIP', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade300),), onPressed: this.widget.skipCallback,),
+                            FlatButton(child: Text('CANCEL', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),), onPressed: this.widget.cancelCallback,),
+                            FlatButton(child: Text('SKIP', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),), onPressed: this.widget.skipCallback,),
                             FlatButton(child: Text('NEXT >', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple),), onPressed: () => {
-                              _pageController.animateToPage(_pageController.page.toInt() + 1, duration: Duration(milliseconds: 300), curve: Curves.ease)
+                              if (_pageController.page != null && _pageController.page == _pages.length -1) {
+                                this.widget.doneCallback()
+                              } else
+                                {
+                                  _pageController.animateToPage(
+                                      _pageController.page.toInt() + 1,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.ease)
+                                }
                             }),
                           ],
                         ),
