@@ -5,7 +5,7 @@ import 'package:coin_counter/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:coin_counter/api.dart';
 
-import 'insturction-overlay..dart';
+import 'insturction-overlay.dart';
 
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`
