@@ -13,11 +13,17 @@ class Prediction:
 
     classifier = RandomForestClassifier()
 
+    table = {}
+
     def __init__(self):
         """ 
         load the classifier
         """
         global classifier
+
+        global table
+
+        table = {'1c' : 1, '2c' : 2, '5c' : 5, '10c' : 10, '20c' : 20, '50c' : 50, '1e' : 100, '2e' : 200}
 
         file_path = './classifier/classifier.json'
         if os.path.exists(file_path):
@@ -34,7 +40,11 @@ class Prediction:
         """ 
         use an image to predict the coin, image has to be in the right format
         """
-        return classifier.predict(image)
+        global table
+        
+        coin = classifier.predict(image)
+        amount = table[coin[0]]
+        return amount
     
     def convert_image(self, im_path):
         """ 

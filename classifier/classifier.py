@@ -20,7 +20,8 @@ def main():
     training_data_im, training_data_real = import_training_data()
     #testing_data_im, testing_data_real = import_testing_data()
 
-    create_classifier(training_data_im, training_data_real)
+    search_classifier(training_data_im, training_data_real)
+    #create_classifier(training_data_im, training_data_real)
 
 
 
@@ -82,22 +83,32 @@ def import_testing_data():
 
     return coins_im, coins_real
 
-def create_classifier(training_data_im, training_data_real):
+def search_classifier(training_data_im, training_data_real):
     """ 
-    use grid_search to find best classifier with given parameters or create classifier with best found parameters
+    use grid_search to find best classifier with given parameters
     """
     X_train = training_data_im
     y_train = training_data_real
 
     #play with param_grid to try out other combinations for classifier parameters
-    #param_grid = [{'max_features': ["auto", "log2"], 'criterion': ["gini", "entropy"], 'oob_score': [True, False], 'random_state': [42, 37], 'n_jobs': [3, 4, 5], 'min_impurity_decrease': [0.01, 0.001, 0.0001]}]
+    param_grid = [{'max_features': ["auto", "log2"], 'criterion': ["gini", "entropy"], 'oob_score': [True, False], 'random_state': [42, 37], 'n_jobs': [1, 2, 3, 4, 5, 6], 'min_impurity_decrease': [0.01, 0.005, 0.001, 0.0005, 0.0001]}]
 
-    #forest_clf = RandomForestClassifier()
-    #grid_search = GridSearchCV(forest_clf, param_grid, cv=5, verbose=3)
-    #grid_search.fit(X_train, y_train)
+    forest_clf = RandomForestClassifier()
+    grid_search = GridSearchCV(forest_clf, param_grid, cv=5, verbose=3)
+    grid_search.fit(X_train, y_train)
 
-    #print(grid_search.best_params_)
-    #print(grid_search.best_score_)
+    print(grid_search.best_params_)
+    print(grid_search.best_score_)
+
+    return
+
+def create_classifier(training_data_im, training_data_real):
+    """ 
+    create classifier with best found parameters
+    """
+
+    X_train = training_data_im
+    y_train = training_data_real
 
     #parameters with best score for classifier
     #{'criterion': 'gini', 'max_features': 'auto', 'min_impurity_decrease': 0.001, 'n_jobs': 3, 'oob_score': True, 'random_state': 42}
