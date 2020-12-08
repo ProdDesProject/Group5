@@ -19,7 +19,7 @@ def cleanFiles():
 
 
 # Crop all found coins and store them as png
-def circleCrop(coordinates,img, img_colour, cnt):
+def circleCrop(coordinates,img, img_colour, cnt, path):
  #   img_colour = cv.imread('inputs/color_coins_example.jpg')
 
     CROP_RESERVE = 5
@@ -38,7 +38,7 @@ def circleCrop(coordinates,img, img_colour, cnt):
     crop = masked_data[y-r-CROP_RESERVE:y + r+CROP_RESERVE, x-r-CROP_RESERVE:x + r+CROP_RESERVE]
 
     # Writing the coin to .PNG with name and number
-    output_string = 'cropped_coins/crop' + str(cnt) + '.png'
+    output_string = path + str(cnt) + '.png'
     cv.imwrite(output_string, crop)
 
 
@@ -112,7 +112,7 @@ def resizeImage(img):
     return resized
 
 # Finding circles in the picture
-def findCircles():
+def findCircles(picturePath):
 
 #    img = cv.imread('inputs/coins_example.png', 0)
 #    img = cv.imread('inputs/test/test_1.jpg',0)
@@ -121,9 +121,9 @@ def findCircles():
 #'inputs/test/test_1.jpg'
 
     # Input picture
-    picturePath = 'inputs/test/test_1.jpg'
-    img = cv.imread(picturePath, 0)
-    img_colour = cv.imread(picturePath)
+    full_path = os.path.join(picturePath, 'image')
+    img = cv.imread(full_path, 0)
+    img_colour = cv.imread(full_path)
 
     # convert to gray colour (24 bit b/w, support colouring the out-lines of the coins in output.png)
     output_img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
@@ -146,8 +146,7 @@ def findCircles():
 #    circles = cv.HoughCircles(blurImg, cv.HOUGH_GRADIENT, 1, minDist=20, param1=90, param2=80, minRadius=0, maxRadius=0)
     circles = cv.HoughCircles(blurImg, cv.HOUGH_GRADIENT, 1, minDist=50, param1=50, param2=50, minRadius=50, maxRadius=180) #""",minRadius=20, maxRadius=120""")
     if circles is None:
-        print('No coins found')
-        exit(0)
+        raise Exception('No circles found.')
     circles = np.uint16(np.around(circles))
 
     # sorting 3-D array due 1st axis
@@ -163,9 +162,11 @@ def findCircles():
         # draw the center of the circle
         cv.circle(output_img, (i[0], i[1]), 2, (0, 0, 255), 3)
         # cut out the coin
-        circleCrop(i,img, img_colour, idx+1)
+        circleCrop(i,img, img_colour, idx+1, picturePath)
 
-    cv.imwrite('output.png',output_img)
+    # cv.imwrite('output.png',output_img)
+    os.remove(full_path)
+
     return circles
 
 def main():

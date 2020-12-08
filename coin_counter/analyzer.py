@@ -1,27 +1,39 @@
-import json
+import os
+import glob
+from datetime import datetime
+from find_coins import main as fc
+from classifier import prediction
+
 
 def count_coins(img: bytes):
     result = {
         'coins': [
-            {
-                'pos': {
-                    'x': 0.321,
-                    'y': 0.7,
-                    'r': 0.1,
-                },
-                'label': '2,00€',
-                'worth': 2.0,
-            },
-            {
-                'pos': {
-                    'x': 0.5,
-                    'y': 0.5,
-                    'r': 0.05,
-                },
-                'label': '0,05€',
-                'worth': 0.05,
-            },
         ],
-        'worth': 2.05
     }
+    
+    base_path = os.path.join(os.path.dirname(__file__), 'tmp')
+    file_path = os.path.join(base_path, datetime.now().strftime("%Y%m%d-%H%M%S"))
+    
+    if not os.path.exists(base_path):
+        os.mkdir(base_path)
+    if not os.path.exists(file_path):
+        os.mkdir(file_path)
+    
+
+    f = open(os.path.join(file_path, 'image'), 'wb')
+    f.write(img)
+    f.close()
+
+    try: 
+        fc.findCircles(file_path)
+    except Exception:
+        return result
+
+    pre = prediction.Prediction()
+
+    for im_path in glob.glob(file_path + '*.png'):
+        image = pre.convert_image(im_path)
+        predict_result = pre.predict(image)
+        result['coins'].append(predict_result)
+
     return result

@@ -23,7 +23,16 @@ class Prediction:
 
         global table
 
-        table = {'1c' : 1, '2c' : 2, '5c' : 5, '10c' : 10, '20c' : 20, '50c' : 50, '1e' : 100, '2e' : 200}
+        table = {
+            '1c' : {'label': '0,01€', 'worth': 0.01}, 
+            '2c' : {'label': '0,02€', 'worth': 0.02},
+            '5c' : {'label': '0,05€', 'worth': 0.05},
+            '10c' : {'label': '0,10€', 'worth': 0.10},
+            '20c' : {'label': '0,20€', 'worth': 0.20},
+            '50c' : {'label': '0,50€', 'worth': 0.50},
+            '1e' : {'label': '1,00€', 'worth': 1.00},
+            '2e' : {'label': '2,00€', 'worth': 2.00},
+        }
 
         file_path = './classifier/classifier.json'
         if os.path.exists(file_path):

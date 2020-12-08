@@ -45,7 +45,7 @@ def res(message, error=None, status=200, content_type='application/json'):
             'error': None,
         }
 
-    return HttpResponse(json.dumps(content), status=status, content_type=content_type)
+    return HttpResponse(json.dumps(content, ensure_ascii=False), status=status, content_type=content_type)
 
 class CoinCounterView(APIView):
     permission_classes = [permissions.IsAuthenticated]
