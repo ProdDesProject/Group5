@@ -31,7 +31,7 @@ def count_coins(img: bytes):
 
     pre = prediction.Prediction()
 
-    for im_path in glob.glob(file_path + '*.png'):
+    for im_path in glob.glob(os.path.join(file_path, '*.png')):
         image = pre.convert_image(im_path)
         predict_result = pre.predict(image)
         result['coins'].append(predict_result)
