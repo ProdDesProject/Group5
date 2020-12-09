@@ -41,6 +41,10 @@ def main():
     
     shutil.rmtree(file_path)
     print(result)
+    total = 0
+    for item in result['coins']:
+        total += item['worth']
+    print(total)
 
 if __name__ == '__main__':
     path = os.getcwd()

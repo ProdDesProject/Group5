@@ -1,6 +1,7 @@
 .vscode
 static
 coin_counter/tmp
+tmp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
