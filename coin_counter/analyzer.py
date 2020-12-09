@@ -1,5 +1,6 @@
 import os
 import glob
+import shutil
 from datetime import datetime
 from find_coins import main as fc
 from classifier import prediction
@@ -27,6 +28,7 @@ def count_coins(img: bytes):
     try: 
         fc.findCircles(file_path)
     except Exception:
+        shutil.rmtree(file_path)
         return result
 
     pre = prediction.Prediction()
@@ -35,5 +37,8 @@ def count_coins(img: bytes):
         image = pre.convert_image(im_path)
         predict_result = pre.predict(image)
         result['coins'].append(predict_result)
+
+    
+    shutil.rmtree(file_path)
 
     return result

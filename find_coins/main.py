@@ -121,7 +121,7 @@ def findCircles(picturePath):
 #'inputs/test/test_1.jpg'
 
     # Input picture
-    full_path = os.path.join(picturePath, 'image')
+    full_path = os.path.join(picturePath, 'image.jpg')
     img = cv.imread(full_path, 0)
     img_colour = cv.imread(full_path)
 
@@ -172,7 +172,7 @@ def findCircles(picturePath):
 def main():
 
     cleanFiles()
-    circles = findCircles()
+    circles = findCircles('./PDaI/tests/coins.jpg')
     toJSON(circles)
 
 if __name__ == '__main__':

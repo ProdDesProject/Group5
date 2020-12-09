@@ -1,21 +1,49 @@
 #!/usr/bin/env python
 
+import os
+import shutil
 import glob
+from datetime import datetime
+from PIL import Image
 from find_coins import main as fc
 from classifier import prediction
 
 def main():
-    print('Coin Counter')
+    result = {
+        'coins': [
+        ],
+    }
+    
+    base_path = os.path.join(os.path.dirname(__file__), 'tmp')
+    file_path = os.path.join(base_path, datetime.now().strftime("%Y%m%d-%H%M%S"))
+    
+    if not os.path.exists(base_path):
+        os.mkdir(base_path)
+    if not os.path.exists(file_path):
+        os.mkdir(file_path)
+    
+    img = Image.open('./find_coins/inputs/test/test_1.jpg')
+    img.save(os.path.join(file_path, 'image.jpg'))
 
-    fc.cleanFiles()
-    circles = fc.findCircles()
-    fc.toJSON(circles)
+    try: 
+        fc.findCircles(file_path)
+    except Exception:
+        shutil.rmtree(file_path)
+        return result
+
     pre = prediction.Prediction()
 
-    for im_path in glob.glob('./find_coins/cropped_coins/*.png'):
+    for im_path in glob.glob(os.path.join(file_path, '*.png')):
         image = pre.convert_image(im_path)
         predict_result = pre.predict(image)
-        print(predict_result)
+        result['coins'].append(predict_result)
+
+    
+    shutil.rmtree(file_path)
+    print(result)
 
 if __name__ == '__main__':
+    path = os.getcwd()
+    if "PDaI" not in path:
+        os.chdir('./PDaI')
     main()

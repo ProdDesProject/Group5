@@ -20,8 +20,8 @@ def main():
     training_data_im, training_data_real = import_training_data()
     #testing_data_im, testing_data_real = import_testing_data()
 
-    search_classifier(training_data_im, training_data_real)
-    #create_classifier(training_data_im, training_data_real)
+    #search_classifier(training_data_im, training_data_real)
+    create_classifier(training_data_im, training_data_real)
 
 
 

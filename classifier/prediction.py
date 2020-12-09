@@ -62,7 +62,7 @@ class Prediction:
         im = []
         image = Image.open(im_path).convert('L')
         #502x502 is shape of pictures used to train the classifier
-        im_resize = image.resize((502,502))
+        im_resize = image.resize((628,628))
         im_array = np.array(im_resize)
         im.append(im_array.flatten())
         return im
