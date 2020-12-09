@@ -38,7 +38,7 @@ def circleCrop(coordinates,img, img_colour, cnt, path):
     crop = masked_data[y-r-CROP_RESERVE:y + r+CROP_RESERVE, x-r-CROP_RESERVE:x + r+CROP_RESERVE]
 
     # Writing the coin to .PNG with name and number
-    output_string = path + str(cnt) + '.png'
+    output_string = os.path.join(path, str(cnt) + '.png')
     cv.imwrite(output_string, crop)
 
 
