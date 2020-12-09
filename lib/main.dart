@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:coin_counter/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:coin_counter/api.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'insturction-overlay.dart';
 
@@ -59,6 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   OverlayEntry _instructionOverlayEntry;
+
+  double _processingCoinsWidgetPadding = 0.0;
 
   var _coins = [
     {
@@ -147,7 +151,20 @@ class _MyHomePageState extends State<MyHomePage> {
     this._instructionOverlayEntry.remove();
   }
 
+  void _processingCoinsWidgetOn() {
+    setState(() {
+      _processingCoinsWidgetPadding = 50.0;
+    });
+  }
+
+  void _processingCoinsWidgetOff() {
+    setState(() {
+      _processingCoinsWidgetPadding = 0.0;
+    });
+  }
+
   Future<void> _takeImageCallback(String imagePath) async {
+    _processingCoinsWidgetOn();
     try {
       Map response = await countCoins(imagePath);
       if (response['error'] != null) {
@@ -162,6 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {
       print(e);
     }
+    _processingCoinsWidgetOff();
   }
 
   @override
@@ -211,34 +229,49 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.white,
             ),
             onPressed: () {
-              _scaffoldKey.currentState.showSnackBar(
+              if (_processingCoinsWidgetPadding > 0.0) {
+                _processingCoinsWidgetOff();
+              } else {
+                _processingCoinsWidgetOn();
+              }
+              /*_scaffoldKey.currentState.showSnackBar(
                   SnackBar(
                     content: Text('No settings yet!')
                   )
-              );
+              );*/
             },
           ),
           Padding(padding: EdgeInsets.only(right: 8.0)),
         ],
       ),
       body: Stack(
-        children: <Widget>[
-          Padding(
-              padding: EdgeInsets.only(top: 30),
-              child: ListView.builder(
-                  itemCount: _coins.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    String label = _coins[index]['label'];
-                    int amount = _coins[index]['amount'];
-                    return CoinWidget(label: label, amount: amount,);
-                  }
-              )
-          ),
-          HeaderWidget(),
-          /*Text(
+        children: [
+          ProcessingCoinsWidget(),
+          AnimatedPadding(
+            padding: EdgeInsets.only(top: _processingCoinsWidgetPadding),
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            child: Stack(
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(top: 30),
+                    child: ListView.builder(
+                        itemCount: _coins.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          String label = _coins[index]['label'];
+                          int amount = _coins[index]['amount'];
+                          return CoinWidget(label: label, amount: amount,);
+                        }
+                    )
+                ),
+                HeaderWidget(),
+                /*Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),*/
+              ],
+            ),
+          )
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -394,6 +427,33 @@ class CoinWidget extends StatelessWidget {
   }
 }
 
+class ProcessingCoinsWidget extends StatelessWidget {
+  static const int NUM_ELEMENTS = 50;
+  static const int ON_SCREEN = 10;
+
+  final double height = 30;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      color: Colors.deepPurple,
+      child: Padding(
+        padding: EdgeInsets.only(left: 25, right: 25),
+        child: Row(
+          children: [
+            SpinKitSpinningCircle(
+              color: Colors.white,
+              size: 30,
+            ),
+            Padding(padding: EdgeInsets.only(left: 15)),
+            Text('Counting coins...', style: TextStyle(color: Colors.white, fontSize: 16,),)
+          ],
+        ),
+      )
+    );
+  }
+}
 
 
 String getCoinImagePath(String label) {
