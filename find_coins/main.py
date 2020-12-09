@@ -125,6 +125,9 @@ def findCircles(picturePath):
     img = cv.imread(full_path, 0)
     img_colour = cv.imread(full_path)
 
+    if not os.path.exists(full_path):
+        raise Exception('No image path.')
+
     # convert to gray colour (24 bit b/w, support colouring the out-lines of the coins in output.png)
     output_img = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
 

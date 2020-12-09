@@ -11,21 +11,21 @@ def count_coins(img: bytes):
         'coins': [
         ],
     }
-    
+
     base_path = os.path.join(os.path.dirname(__file__), 'tmp')
     file_path = os.path.join(base_path, datetime.now().strftime("%Y%m%d-%H%M%S"))
-    
+
     if not os.path.exists(base_path):
         os.mkdir(base_path)
     if not os.path.exists(file_path):
         os.mkdir(file_path)
-    
 
-    f = open(os.path.join(file_path, 'image'), 'wb')
+
+    f = open(os.path.join(file_path, 'image.jpg'), 'wb')
     f.write(img)
     f.close()
 
-    try: 
+    try:
         fc.findCircles(file_path)
     except Exception:
         shutil.rmtree(file_path)
