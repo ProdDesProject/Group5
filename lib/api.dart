@@ -19,7 +19,8 @@ Future<Map> countCoins(String filePath) async {
       },
       body: File(filePath).readAsBytesSync(),
     );
-    return json.decode(response.body);
+
+    return json.decode(utf8.decode(response.bodyBytes));
   } catch (e) {
     print(e);
   }
